@@ -1,0 +1,296 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
+{\fonttbl\f0\froman\fcharset0 Times-Roman;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\pardirnatural\qj\partightenfactor0
+
+\f0\fs24 \cf0 // include the library code:\
+#include <LiquidCrystal.h>\
+#include <SoftwareSerial.h>\
+\
+<?php \
+echo exec('gpio -g write 17 1');\
+ sleep(3);\
+echo exec('gpio -g write 17 0');\
+?>\
+<?php\
+if(isset($_GET['cmd']) )\{\
+if($_GET['cmd']==1)\{\
+exec('gpio -g write 4 0');\
+exec('gpio -g write 17 1');\
+exec('gpio -g write 27 0');\
+exec('gpio -g write 22 1');\
+\
+sleep(1);\
+exec('gpio -g write 4 0');\
+exec('gpio -g write 17 0');\
+exec('gpio -g write 27 0');\
+exec('gpio -g write 22 0');\
+\
+\}\
+\
+\
+if($_GET['cmd']==2)\{\
+exec('gpio -g write 4 1');\
+exec('gpio -g write 17 0');\
+exec('gpio -g write 27 1');\
+exec('gpio -g write 22 0');\
+\
+sleep(1);\
+exec('gpio -g write 4 0');\
+exec('gpio -g write 17 0');\
+exec('gpio -g write 27 0');\
+exec('gpio -g write 22 0');\
+\
+\}\
+\
+if($_GET['cmd']==3)\{\
+exec('gpio -g write 4 0');\
+exec('gpio -g write 17 1');\
+exec('gpio -g write 27 0');\
+exec('gpio -g write 22 0');\
+\
+sleep(1);\
+exec('gpio -g write 4 0');\
+exec('gpio -g write 17 0');\
+exec('gpio -g write 27 0');\
+exec('gpio -g write 22 0');\
+\
+\}\
+\
+if($_GET['cmd']==4)\{\
+exec('gpio -g write 4 0');\
+exec('gpio -g write 17 0');\
+exec('gpio -g write 27 0');\
+exec('gpio -g write 22 1');\
+\
+sleep(1);\
+exec('gpio -g write 4 0');\
+exec('gpio -g write 17 0');\
+exec('gpio -g write 27 0');\
+exec('gpio -g write 22 0');\
+\
+\}\
+\
+\}\
+\
+?>\
+<!DOCTYPE html>\
+<html>\
+<head>\
+</head>\
+<body>\
+<center>\
+<form method="post">\
+\
+\
+<a href="control.php?cmd=1"><img src="forward.jpg"></a>\
+<br>\
+\
+<a href="control.php?cmd=4"><img src="left.jpg"></a>\
+<a href="control.php?cmd=3"><img src="right.jpg"></a>\
+<br>\
+<a href="control.php?cmd=2"><img src="rev.jpg"></a>\
+<br>\
+</form>\
+<center>\
+</body>\
+</html>\
+<?php\
+require('sql_connect.php');\
+session_start();\
+$hostname = "localhost:3306"; // usually is localhost, but if not sure, check wi$\
+$db_user = "root"; // change to your database password\
+$db_password = "root"; // change to your database password\
+$database = "notification"; // provide your database name\
+$db_table = "noti";\
+if(isset($_POST['submit']))\
+\{\
+        if(!$_POST['noti'])\
+\{\
+        echo ("<SCRIPT LANGUAGE='JavaScript'>\
+        alert('enter the Notification name');\
+        window.location.href='controlupdate.php'\
+        </SCRIPT>");\
+\}\
+else\{\
+$noti=$_POST['noti'];\
+//$con=new mysqli("localhost:3306","root","root","notification");\
+//$query="insert into $db_table(notificat)values('$noti');\
+//mysql_query($query) or die('error');\
+$sql= mysql_query("insert into $db_table(notificat)values('$noti')");\
+\
+echo ("<SCRIPT LANGUAGE='JavaScript'>\
+        window.alert('update  Succesfully!.')\
+\
+        window.location.href='controlupdate.php'\
+        </SCRIPT>");\
+\
+\
+\}\
+\}\
+?>\
+\
+<!DOCTYPE html>\
+<html>\
+<head>\
+</head>\
+<body>\
+<center>\
+<form action="controlupdate.php" method="post">\
+<label>Notice</label><input type="text" name="noti"><br><input type="submit" name="submit">\
+\
+</form>\
+<iframe width="400" height="800" src="control.php"></iframe>\
+</center>\
+</body>\
+</html>\
+<?php \
+require ('sql_connect.php');\
+session_start();\
+if (isset($_POST['submit']))\
+\{\
+$username=mysql_escape_string($_POST['user']);\
+$password=mysql_escape_string($_POST['pass']);\
+$_SESSION['user']=$username;\
+if (!$_POST['user'] | !$_POST['pass'])\
+ \{\
+echo ("<SCRIPT LANGUAGE='JavaScript'>\
+        window.alert('You did not complete all of the required fields')\
+        window.location.href='index.php'\
+        </SCRIPT>");\
+exit();\
+     \}\
+$sql= mysql_query("SELECT * FROM `user` WHERE `name` = '$username' AND `password` = '$password'");\
+if(mysql_num_rows($sql) > 0)\
+\{    \
+echo ("<SCRIPT LANGUAGE='JavaScript'>\
+        window.alert('Login Succesfully!.')\
+        \
+        window.location.href='controlupdate.php'\
+        </SCRIPT>");\
+exit();\
+\}\
+else\{\
+echo ("<SCRIPT LANGUAGE='JavaScript'>\
+        window.alert('Wrong username password combination.Please re-enter.')\
+        window.location.href='index.php'\
+        </SCRIPT>");\
+exit();\
+\}\
+\}\
+else\{\
+\}\
+?>\
+<!DOCTYPE html>\
+<html>\
+<body>\
+<Center>\
+<form method="post"> \
+username:\
+<input type="text" name="user"/><br>\
+password:\
+<input type="password" name="pass"/><br>\
+<input type="submit" name="submit"/>\
+</form>\
+</center>\
+</body>\
+</html><?php \
+require ('sql_connect.php');\
+session_start();\
+if (isset($_POST['submit']))\
+\{\
+$username=mysql_escape_string($_POST['user']);\
+$password=mysql_escape_string($_POST['pass']);\
+$_SESSION['user']=$username;\
+if (!$_POST['user'] | !$_POST['pass'])\
+ \{\
+echo ("<SCRIPT LANGUAGE='JavaScript'>\
+        window.alert('You did not complete all of the required fields')\
+        window.location.href='index.php'\
+        </SCRIPT>");\
+exit();\
+     \}\
+$sql= mysql_query("SELECT * FROM `user` WHERE `name` = '$username' AND `password` = '$password'");\
+if(mysql_num_rows($sql) > 0)\
+\{    \
+echo ("<SCRIPT LANGUAGE='JavaScript'>\
+        window.alert('Login Succesfully!.')\
+        \
+        window.location.href='controlupdate.php'\
+        </SCRIPT>");\
+exit();\
+\}\
+else\{\
+echo ("<SCRIPT LANGUAGE='JavaScript'>\
+        window.alert('Wrong username password combination.Please re-enter.')\
+        window.location.href='index.php'\
+        </SCRIPT>");\
+exit();\
+\}\
+\}\
+else\{\
+\}\
+?>\
+<!DOCTYPE html>\
+<html>\
+<body>\
+<Center>\
+<form method="post"> \
+username:\
+<input type="text" name="user"/><br>\
+password:\
+<input type="password" name="pass"/><br>\
+<input type="submit" name="submit"/>\
+</form>\
+</center>\
+</body>\
+</html>\
+<?php\
+$page = $_SERVER['PHP_SELF'];\
+$sec = "3";\
+?>\
+\
+<!DOCTYPE html>\
+<html>\
+<head>\
+<meta http-equiv="refresh" content="<?php echo $sec?>;URL='<?php echo $page?>'">\
+<style>\
+p\{\
+font-weight:bold;\
+font-size:180%;\
+text-align:center;\
+text-color: #fff;\
+\}\
+\
+</style>\
+</head>\
+<body>\
+<center>\
+<table border="1" width=100% cellpadding="2" bgcolor="white">\
+\
+<?php \
+\
+require('sql_connect.php');\
+$con=mysql_connect("localhost:3306","root","root");\
+$sql="select * from  noti ORDER by id asc";\
+mysql_select_db('notification');\
+\
+$result=mysql_query($sql,$con);\
+while($row = mysql_fetch_array($result)) \{\
+\
+		\
+        \
+	\
+\
+		echo "<tr><td><p>".$row['notificat']."</p></td></tr>";	\
+		echo "<br>";\
+\}\
+?>\
+</table>\
+</center>\
+</body>\
+</html>\
+}
