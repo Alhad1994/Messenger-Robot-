@@ -1,4 +1,4 @@
-# Messenger-Robot-
+# Messenger-Robot
 Messenger Robot using Raspberry Pi 
 
 •	Introduction to ARM cortex A7 microprocessor and architecture along with Broadcom BCM2837B0 SoC.
