@@ -9,4 +9,4 @@ Messenger Robot using Raspberry Pi
 
 •	Implemented WebRTC streaming to host a live feed from the PI camera to guide robot’s path using the UV4L server.
 
-•	The UV4L server provided support to host Two-way Audio/video conference using Janus WebRTC gateway and JITSI meet which served as an additional feature to the project.
+•	The UV4L server provided support to host Two-way Audio/video conference using Janus WebRTC gateway and JITSI meet which served as an additional feature to the project
